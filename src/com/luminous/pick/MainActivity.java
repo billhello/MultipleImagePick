@@ -62,7 +62,7 @@ public class MainActivity extends Activity {
 		handler = new Handler();
 		gridGallery = (GridView) findViewById(R.id.gridGallery);
 		gridGallery.setFastScrollEnabled(true);
-		adapter = new GalleryAdapter(getApplicationContext(), imageLoader);
+		adapter = new GalleryAdapter(getApplicationContext(), imageLoader, 5);
 		adapter.setMultiplePick(false);
 		gridGallery.setAdapter(adapter);
 

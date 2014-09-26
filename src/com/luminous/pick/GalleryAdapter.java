@@ -6,6 +6,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
@@ -14,176 +15,182 @@ import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 
 public class GalleryAdapter extends BaseAdapter {
 
-	private Context mContext;
-	private LayoutInflater infalter;
-	private ArrayList<CustomGallery> data = new ArrayList<CustomGallery>();
-	ImageLoader imageLoader;
+    private Context mContext;
+    private LayoutInflater infalter;
+    private ArrayList<CustomGallery> data = new ArrayList<CustomGallery>();
+    ImageLoader imageLoader;
+    int mNumClumns = 3;
 
-	private boolean isActionMultiplePick;
+    private boolean isActionMultiplePick;
 
-	public GalleryAdapter(Context c, ImageLoader imageLoader) {
-		infalter = (LayoutInflater) c
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		mContext = c;
-		this.imageLoader = imageLoader;
-		// clearCache();
-	}
+    public GalleryAdapter(Context c, ImageLoader imageLoader, int numClumns) {
+        infalter = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mContext = c;
+        this.imageLoader = imageLoader;
+        // clearCache();
+        mNumClumns = numClumns;
+    }
 
-	@Override
-	public int getCount() {
-		return data.size();
-	}
+    @Override
+    public int getCount() {
+        return data.size();
+    }
 
-	@Override
-	public CustomGallery getItem(int position) {
-		return data.get(position);
-	}
+    @Override
+    public CustomGallery getItem(int position) {
+        return data.get(position);
+    }
 
-	@Override
-	public long getItemId(int position) {
-		return position;
-	}
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
-	public void setMultiplePick(boolean isMultiplePick) {
-		this.isActionMultiplePick = isMultiplePick;
-	}
+    public void setMultiplePick(boolean isMultiplePick) {
+        this.isActionMultiplePick = isMultiplePick;
+    }
 
-	public void selectAll(boolean selection) {
-		for (int i = 0; i < data.size(); i++) {
-			data.get(i).isSeleted = selection;
+    public void selectAll(boolean selection) {
+        for (int i = 0; i < data.size(); i++) {
+            data.get(i).isSeleted = selection;
 
-		}
-		notifyDataSetChanged();
-	}
+        }
+        notifyDataSetChanged();
+    }
 
-	public boolean isAllSelected() {
-		boolean isAllSelected = true;
+    public boolean isAllSelected() {
+        boolean isAllSelected = true;
 
-		for (int i = 0; i < data.size(); i++) {
-			if (!data.get(i).isSeleted) {
-				isAllSelected = false;
-				break;
-			}
-		}
+        for (int i = 0; i < data.size(); i++) {
+            if (!data.get(i).isSeleted) {
+                isAllSelected = false;
+                break;
+            }
+        }
 
-		return isAllSelected;
-	}
+        return isAllSelected;
+    }
 
-	public boolean isAnySelected() {
-		boolean isAnySelected = false;
+    public boolean isAnySelected() {
+        boolean isAnySelected = false;
 
-		for (int i = 0; i < data.size(); i++) {
-			if (data.get(i).isSeleted) {
-				isAnySelected = true;
-				break;
-			}
-		}
+        for (int i = 0; i < data.size(); i++) {
+            if (data.get(i).isSeleted) {
+                isAnySelected = true;
+                break;
+            }
+        }
 
-		return isAnySelected;
-	}
+        return isAnySelected;
+    }
 
-	public ArrayList<CustomGallery> getSelected() {
-		ArrayList<CustomGallery> dataT = new ArrayList<CustomGallery>();
+    public ArrayList<CustomGallery> getSelected() {
+        ArrayList<CustomGallery> dataT = new ArrayList<CustomGallery>();
 
-		for (int i = 0; i < data.size(); i++) {
-			if (data.get(i).isSeleted) {
-				dataT.add(data.get(i));
-			}
-		}
+        for (int i = 0; i < data.size(); i++) {
+            if (data.get(i).isSeleted) {
+                dataT.add(data.get(i));
+            }
+        }
 
-		return dataT;
-	}
+        return dataT;
+    }
 
-	public void addAll(ArrayList<CustomGallery> files) {
+    public void addAll(ArrayList<CustomGallery> files) {
 
-		try {
-			this.data.clear();
-			this.data.addAll(files);
+        try {
+            this.data.clear();
+            this.data.addAll(files);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-		notifyDataSetChanged();
-	}
+        notifyDataSetChanged();
+    }
 
-	public void changeSelection(View v, int position) {
+    public void changeSelection(View v, int position) {
 
-		if (data.get(position).isSeleted) {
-			data.get(position).isSeleted = false;
-		} else {
-			data.get(position).isSeleted = true;
-		}
+        if (data.get(position).isSeleted) {
+            data.get(position).isSeleted = false;
+        } else {
+            data.get(position).isSeleted = true;
+        }
 
-		((ViewHolder) v.getTag()).imgQueueMultiSelected.setSelected(data
-				.get(position).isSeleted);
-	}
+        ((ViewHolder) v.getTag()).imgQueueMultiSelected.setSelected(data.get(position).isSeleted);
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
 
-		final ViewHolder holder;
-		if (convertView == null) {
+        final ViewHolder holder;
+        if (convertView == null) {
 
-			convertView = infalter.inflate(R.layout.gallery_item, null);
-			holder = new ViewHolder();
-			holder.imgQueue = (ImageView) convertView
-					.findViewById(R.id.imgQueue);
+            convertView = infalter.inflate(R.layout.gallery_item, null);
+            holder = new ViewHolder();
+            holder.imgQueue = (ImageView) convertView.findViewById(R.id.imgQueue);
 
-			holder.imgQueueMultiSelected = (ImageView) convertView
-					.findViewById(R.id.imgQueueMultiSelected);
+            LayoutParams params = holder.imgQueue.getLayoutParams();
+            params.height = params.width / mNumClumns * 3;
+            holder.imgQueue.setLayoutParams(params);
 
-			if (isActionMultiplePick) {
-				holder.imgQueueMultiSelected.setVisibility(View.VISIBLE);
-			} else {
-				holder.imgQueueMultiSelected.setVisibility(View.GONE);
-			}
+            holder.imgQueueMultiSelected =
+                    (ImageView) convertView.findViewById(R.id.imgQueueMultiSelected);
 
-			convertView.setTag(holder);
+            if (isActionMultiplePick) {
+                holder.imgQueueMultiSelected.setVisibility(View.VISIBLE);
+            } else {
+                holder.imgQueueMultiSelected.setVisibility(View.GONE);
+            }
 
-		} else {
-			holder = (ViewHolder) convertView.getTag();
-		}
-		holder.imgQueue.setTag(position);
+            convertView.setTag(holder);
 
-		try {
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+        holder.imgQueue.setTag(position);
 
-			imageLoader.displayImage("file://" + data.get(position).sdcardPath,
-					holder.imgQueue, new SimpleImageLoadingListener() {
-						@Override
-						public void onLoadingStarted(String imageUri, View view) {
-							holder.imgQueue
-									.setImageResource(R.drawable.no_media);
-							super.onLoadingStarted(imageUri, view);
-						}
-					});
+        try {
 
-			if (isActionMultiplePick) {
+            imageLoader.displayImage("file://" + data.get(position).sdcardPath, holder.imgQueue,
+                    new SimpleImageLoadingListener() {
+                        @Override
+                        public void onLoadingStarted(String imageUri, View view) {
+                            holder.imgQueue.setImageResource(R.drawable.no_media);
+                            super.onLoadingStarted(imageUri, view);
+                        }
+                    });
 
-				holder.imgQueueMultiSelected
-						.setSelected(data.get(position).isSeleted);
+            if (isActionMultiplePick) {
 
-			}
+                holder.imgQueueMultiSelected.setSelected(data.get(position).isSeleted);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+            }
 
-		return convertView;
-	}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-	public class ViewHolder {
-		ImageView imgQueue;
-		ImageView imgQueueMultiSelected;
-	}
+        return convertView;
+    }
 
-	public void clearCache() {
-		imageLoader.clearDiscCache();
-		imageLoader.clearMemoryCache();
-	}
+    public class ViewHolder {
+        ImageView imgQueue;
+        ImageView imgQueueMultiSelected;
+    }
 
-	public void clear() {
-		data.clear();
-		notifyDataSetChanged();
-	}
+    public void clearCache() {
+        imageLoader.clearDiscCache();
+        imageLoader.clearMemoryCache();
+    }
+
+    public void clear() {
+        data.clear();
+        notifyDataSetChanged();
+    }
+
+    public void setNumColumns(int numClumns) {
+        // TODO Auto-generated method stub
+        mNumClumns = numClumns;
+    }
 }

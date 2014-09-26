@@ -31,11 +31,11 @@ import com.nostra13.universalimageloader.utils.StorageUtils;
 
 public class CustomGalleryActivity extends Activity {
 
-	GridView gridGallery;
+	GridView mGridGallery;
 	Handler handler;
 	GalleryAdapter adapter;
 
-	ImageView imgNoMedia;
+	ImageView mImgNoMedia;
 	Button btnGalleryOk;
 
 	String action;
@@ -85,29 +85,29 @@ public class CustomGalleryActivity extends Activity {
 	private void init() {
 
 		handler = new Handler();
-		gridGallery = (GridView) findViewById(R.id.gridGallery);
-		gridGallery.setFastScrollEnabled(true);
-		adapter = new GalleryAdapter(getApplicationContext(), imageLoader);
+		mGridGallery = (GridView) findViewById(R.id.gridGallery);
+		mGridGallery.setFastScrollEnabled(true);
+		adapter = new GalleryAdapter(getApplicationContext(), imageLoader, 4);
 		PauseOnScrollListener listener = new PauseOnScrollListener(imageLoader,
 				true, true);
-		gridGallery.setOnScrollListener(listener);
+		mGridGallery.setOnScrollListener(listener);
 
 		if (action.equalsIgnoreCase(Action.ACTION_MULTIPLE_PICK)) {
 
 			findViewById(R.id.llBottomContainer).setVisibility(View.VISIBLE);
-			gridGallery.setOnItemClickListener(mItemMulClickListener);
+			mGridGallery.setOnItemClickListener(mItemMulClickListener);
 			adapter.setMultiplePick(true);
 
 		} else if (action.equalsIgnoreCase(Action.ACTION_PICK)) {
 
 			findViewById(R.id.llBottomContainer).setVisibility(View.GONE);
-			gridGallery.setOnItemClickListener(mItemSingleClickListener);
+			mGridGallery.setOnItemClickListener(mItemSingleClickListener);
 			adapter.setMultiplePick(false);
 
 		}
 
-		gridGallery.setAdapter(adapter);
-		imgNoMedia = (ImageView) findViewById(R.id.imgNoMedia);
+		mGridGallery.setAdapter(adapter);
+		mImgNoMedia = (ImageView) findViewById(R.id.imgNoMedia);
 
 		btnGalleryOk = (Button) findViewById(R.id.btnGalleryOk);
 		btnGalleryOk.setOnClickListener(mOkClickListener);
@@ -134,9 +134,9 @@ public class CustomGalleryActivity extends Activity {
 
 	private void checkImageStatus() {
 		if (adapter.isEmpty()) {
-			imgNoMedia.setVisibility(View.VISIBLE);
+			mImgNoMedia.setVisibility(View.VISIBLE);
 		} else {
-			imgNoMedia.setVisibility(View.GONE);
+			mImgNoMedia.setVisibility(View.GONE);
 		}
 	}
 
